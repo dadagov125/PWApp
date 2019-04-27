@@ -232,4 +232,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 .vs/
-ClientApp/package-lock.json
+.vs
+package-lock.json
+obj/
