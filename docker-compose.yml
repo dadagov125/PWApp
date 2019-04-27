@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pwapp:
+    image: ${DOCKER_REGISTRY}pwapp
+    build:
+      context: .
+      dockerfile: PWApp/Dockerfile
