@@ -12,7 +12,7 @@ namespace PWApp.Entities
 
         public string UserId { get; set; }
 
-        public string User { get; set; }
+        public User User { get; set; }
 
 
         public Account()

@@ -7,7 +7,7 @@ namespace PWApp.Services
     {
         public static void Provide(this IServiceCollection services)
         {
-            services.AddSingleton<IAccountService, AccountService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
     }
 }

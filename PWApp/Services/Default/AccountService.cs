@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +14,8 @@ namespace PWApp.Services.Default
     {
         private readonly ApplicationContext Context;
 
-        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
+        private static readonly Mutex
+            mutex = new Mutex(true, Assembly.GetExecutingAssembly().GetType().GUID.ToString());
 
         public AccountService(ApplicationContext context)
         {
@@ -46,7 +49,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                await semaphore.WaitAsync();
+                mutex.WaitOne();
 
                 using (var transaction = await Context.Database.BeginTransactionAsync())
                 {
@@ -68,7 +71,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                semaphore.Release();
+                mutex.ReleaseMutex();
             }
 
 
@@ -83,7 +86,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                await semaphore.WaitAsync();
+                mutex.WaitOne();
                 using (var transaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
@@ -104,7 +107,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                semaphore.Release();
+                mutex.ReleaseMutex();
             }
 
 
@@ -117,7 +120,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                await semaphore.WaitAsync();
+                mutex.WaitOne();
                 using (var transaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
@@ -142,7 +145,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                semaphore.Release();
+                mutex.ReleaseMutex();
             }
         }
 
