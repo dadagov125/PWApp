@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PWApp.Entities;
+using PWApp.Services;
 using PWApp.ViewModels;
-using System.Linq;
-using System.Linq.Expressions;
+
 
 namespace PWApp.Controllers.Api
 {
@@ -14,11 +14,14 @@ namespace PWApp.Controllers.Api
     {
         private readonly UserManager<User> UserManager;
         private readonly SignInManager<User> SignInManager;
+        private readonly IAccountService AccountService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
+            IAccountService accountService)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            AccountService = accountService;
         }
 
         [HttpPost]
@@ -29,7 +32,13 @@ namespace PWApp.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var user = new User {UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName};
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
 
             var identityResult = await UserManager.CreateAsync(user, model.Password);
 
@@ -41,7 +50,21 @@ namespace PWApp.Controllers.Api
 
             await SignInManager.SignInAsync(user, false);
 
-            return Ok();
+            await AccountService.CreateAccount(user.Id);
+
+            var balance = await AccountService.Deposit(user.Id, 500);
+
+
+            return Json(new UserAccountVM
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
+                Balance = balance
+            });
         }
     }
 }

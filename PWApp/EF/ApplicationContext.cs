@@ -11,5 +11,7 @@ namespace PWApp.EF
             Database.EnsureCreated();
             
         }
+        
+        public DbSet<Account> Accounts { get; set; }
     }
 }

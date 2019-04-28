@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PWApp.EF;
 using PWApp.Entities;
+using PWApp.Services;
+using ServiceProvider = PWApp.Services.ServiceProvider;
 
 namespace PWApp
 {
@@ -26,6 +28,9 @@ namespace PWApp
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
+            
+            ServiceProvider.Provide(services);
+            
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
 
