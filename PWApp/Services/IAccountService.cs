@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿
 using System.Threading.Tasks;
-using PWApp.Entities;
-using PWApp.ViewModels;
+using PWApp.EF.Entities;
+using PWApp.Models.Filters;
+using PWApp.Models.Response;
+
 
 namespace PWApp.Services
 {
@@ -11,7 +13,7 @@ namespace PWApp.Services
 
         Task<Account> GetAccount(string userId);
 
-        Task<TransactionsListVM> GetTransactions(string userId, PaginationFilter filter);
+        Task<TransactionsListResponse> GetTransactions(string userId, PaginationFilter filter);
 
         Task<Transaction> Deposit(string userId, decimal amount);
 
@@ -27,6 +29,6 @@ namespace PWApp.Services
 
         Task<bool> IsAccountActive(string userId);
 
-        Task<UsersListVM> GetUsersList(UsersListFilter filter);
+        Task<UsersListResponse> GetUsersList(UsersListFilter filter);
     }
 }

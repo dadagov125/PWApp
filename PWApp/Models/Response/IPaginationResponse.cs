@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Response
 {
-    public interface IPaginationResult<T>
+    public interface IPaginationResponse<T>
     {
         List<T> List { get; set; }
 

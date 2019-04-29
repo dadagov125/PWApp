@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Filters
 {
     public class PaginationFilter
     {

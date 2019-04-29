@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PWApp.EF;
-using PWApp.Entities;
+using PWApp.EF.Entities;
 using PWApp.Services;
 using ServiceProvider = PWApp.Services.ServiceProvider;
 

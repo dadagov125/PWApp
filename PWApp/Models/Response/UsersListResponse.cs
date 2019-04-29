@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Response
 {
-    public class UsersListVM : IPaginationResult<UserVM>
+    public class UsersListResponse : IPaginationResponse<UserResponse>
     {
-        public List<UserVM> List { get; set; }
+        public List<UserResponse> List { get; set; }
 
         public int TotalCount { get; set; }
 

@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PWApp.EF;
-using PWApp.Entities;
-using PWApp.ViewModels;
+using PWApp.EF.Entities;
+using PWApp.Models.Filters;
+using PWApp.Models.Response;
 
 namespace PWApp.Services.Default
 {
@@ -43,9 +40,9 @@ namespace PWApp.Services.Default
             return account;
         }
 
-        public async Task<TransactionsListVM> GetTransactions(string userId, PaginationFilter filter)
+        public async Task<TransactionsListResponse> GetTransactions(string userId, PaginationFilter filter)
         {
-            TransactionsListVM result = new TransactionsListVM();
+            TransactionsListResponse result = new TransactionsListResponse();
 
             var account = await GetAccount(userId);
 
@@ -74,15 +71,15 @@ namespace PWApp.Services.Default
             result.List = await query
                 .Include(p => p.FromAccount).ThenInclude(a => a.Owner)
                 .Include(p => p.ToAccount).ThenInclude(a => a.Owner)
-                .Select(t => new TransactionVM
+                .Select(t => new TransactionResponse
                 {
                     Id = t.Id,
                     Amount = t.Amount,
                     Created = t.Created,
                     TransactionType = t.TransactionType,
                     Comment = t.Comment,
-                    FromUser = UserVM.FromUser(t.FromAccount.Owner),
-                    ToUser = UserVM.FromUser(t.ToAccount.Owner),
+                    FromUser = UserResponse.FromUser(t.FromAccount.Owner),
+                    ToUser = UserResponse.FromUser(t.ToAccount.Owner),
                     Balance = t.Balance
                 }).ToListAsync();
 
@@ -294,9 +291,9 @@ namespace PWApp.Services.Default
             return account.IsActive;
         }
 
-        public async Task<UsersListVM> GetUsersList(UsersListFilter filter)
+        public async Task<UsersListResponse> GetUsersList(UsersListFilter filter)
         {
-            UsersListVM result = new UsersListVM();
+            UsersListResponse result = new UsersListResponse();
 
             var query = Context.Users.AsQueryable();
 
@@ -330,7 +327,7 @@ namespace PWApp.Services.Default
                 }
             }
 
-            result.List = await query.Select(u => UserVM.FromUser(u)).ToListAsync();
+            result.List = await query.Select(u => UserResponse.FromUser(u)).ToListAsync();
 
             return result;
         }

@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PWApp.Entities;
+using PWApp.EF.Entities;
+using PWApp.Models.Filters;
+using PWApp.Models.Request;
+using PWApp.Models.Response;
 using PWApp.Services;
-using PWApp.ViewModels;
 
 
 namespace PWApp.Controllers.Api
@@ -28,7 +30,7 @@ namespace PWApp.Controllers.Api
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterVM model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +59,7 @@ namespace PWApp.Controllers.Api
 
             var transaction = await AccountService.Deposit(user.Id, 500);
 
-            return Json(new UserAccountVM
+            return Json(new UserAccountResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -71,7 +73,7 @@ namespace PWApp.Controllers.Api
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginVM model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -90,7 +92,7 @@ namespace PWApp.Controllers.Api
             var balance = await AccountService.GetBalance(user.Id);
 
 
-            return Json(new UserAccountVM
+            return Json(new UserAccountResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -118,7 +120,7 @@ namespace PWApp.Controllers.Api
 
             var balance = await AccountService.GetBalance(user.Id);
 
-            return Json(new UserAccountVM
+            return Json(new UserAccountResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -159,7 +161,7 @@ namespace PWApp.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Transfer([FromBody] TransferVN model)
+        public async Task<IActionResult> Transfer([FromBody] TransferRequest model)
         {
             if (!ModelState.IsValid)
             {

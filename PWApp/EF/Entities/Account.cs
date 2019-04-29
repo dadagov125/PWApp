@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PWApp.Entities
+namespace PWApp.EF.Entities
 {
     public class Account
     {

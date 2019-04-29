@@ -1,8 +1,8 @@
-﻿using PWApp.Entities;
+﻿using PWApp.EF.Entities;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Response
 {
-    public class UserVM
+    public class UserResponse
     {
         public string Id { get; set; }
 
@@ -17,10 +17,10 @@ namespace PWApp.ViewModels
         public string LastName { get; set; }
 
 
-        public static UserVM FromUser(User user)
+        public static UserResponse FromUser(User user)
         {
             if (user == null) return null;
-            return new UserVM
+            return new UserResponse
             {
                 Id = user.Id,
                 Email = user.Email,

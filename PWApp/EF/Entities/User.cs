@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace PWApp.Entities
+namespace PWApp.EF.Entities
 {
     public class User : IdentityUser
     {

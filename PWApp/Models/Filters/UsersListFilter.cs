@@ -1,4 +1,4 @@
-﻿namespace PWApp.ViewModels
+﻿namespace PWApp.Models.Filters
 {
     public class UsersListFilter : PaginationFilter
     {

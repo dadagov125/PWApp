@@ -1,15 +1,15 @@
 ﻿using System;
-using PWApp.Entities;
+using PWApp.EF.Entities;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Response
 {
-    public class TransactionVM
+    public class TransactionResponse
     {
         public string Id { get; set; }
 
-        public UserVM FromUser { get; set; }
+        public UserResponse FromUser { get; set; }
 
-        public UserVM ToUser { get; set; }
+        public UserResponse ToUser { get; set; }
 
         public decimal Amount { get; set; }
 

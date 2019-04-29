@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PWApp.Entities
+namespace PWApp.EF.Entities
 {
     public class Transaction
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PWApp.ViewModels
+namespace PWApp.Models.Request
 {
-    public class TransferVN
+    public class TransferRequest
     {
         [Required]
         public string ReceiverId { get; set; }
