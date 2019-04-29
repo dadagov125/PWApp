@@ -141,7 +141,7 @@ namespace PWApp.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> UsersAutocomplete([FromQuery] UsersListFilter filter)
+        public async Task<IActionResult> Users([FromQuery] UsersListFilter filter)
         {
             var users = await AccountService.GetUsersList(filter);
 

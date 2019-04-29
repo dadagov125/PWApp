@@ -8,8 +8,8 @@ namespace PWApp.ViewModels
 
         public int TotalCount { get; set; }
 
-        public int Skipped { get; set; }
+        public int? Skipped { get; set; }
 
-        public int Taken { get; set; }
+        public int? Taken { get; set; }
     }
 }

@@ -17,8 +17,7 @@ namespace PWApp.Services.Default
     {
         private readonly ApplicationContext Context;
 
-        private static readonly Mutex
-            mutex = new Mutex(true, Assembly.GetExecutingAssembly().GetType().GUID.ToString());
+        private static readonly SemaphoreSlim semaphore = new SemaphoreSlim(1, 1);
 
         public AccountService(ApplicationContext context)
         {
@@ -52,6 +51,7 @@ namespace PWApp.Services.Default
 
             var query = Context.Transactions.Where(t => t.ToAccountId == account.Id || t.FromAccountId == account.Id);
 
+
             result.TotalCount = await query.CountAsync();
 
             if (filter != null)
@@ -71,7 +71,20 @@ namespace PWApp.Services.Default
                 }
             }
 
-            result.List = await query.ToListAsync();
+            result.List = await query
+                .Include(p => p.FromAccount).ThenInclude(a => a.Owner)
+                .Include(p => p.ToAccount).ThenInclude(a => a.Owner)
+                .Select(t => new TransactionVM
+                {
+                    Id = t.Id,
+                    Amount = t.Amount,
+                    Created = t.Created,
+                    TransactionType = t.TransactionType,
+                    Comment = t.Comment,
+                    FromUser = UserVM.FromUser(t.FromAccount.Owner),
+                    ToUser = UserVM.FromUser(t.ToAccount.Owner),
+                    Balance = t.Balance
+                }).ToListAsync();
 
             return result;
         }
@@ -85,7 +98,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                mutex.WaitOne();
+                await semaphore.WaitAsync();
 
                 using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
@@ -95,8 +108,7 @@ namespace PWApp.Services.Default
 
                         account.Balance += amount;
 
-
-                        Context.Transactions.Add(new Transaction()
+                        transaction = new Transaction()
                         {
                             FromAccountId = account.Id,
                             ToAccountId = null,
@@ -104,9 +116,13 @@ namespace PWApp.Services.Default
                             Created = DateTime.Now,
                             Amount = amount,
                             Balance = account.Balance
-                        });
+                        };
+
+                        Context.Transactions.Add(transaction);
 
                         await Context.SaveChangesAsync();
+
+                        dbContextTransaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -118,7 +134,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                mutex.ReleaseMutex();
+                semaphore.Release();
             }
 
 
@@ -133,7 +149,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                mutex.WaitOne();
+                await semaphore.WaitAsync();
                 using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
@@ -142,7 +158,7 @@ namespace PWApp.Services.Default
 
                         account.Balance -= amount;
 
-                        Context.Transactions.Add(new Transaction()
+                        transaction = new Transaction()
                         {
                             FromAccountId = account.Id,
                             ToAccountId = null,
@@ -150,9 +166,13 @@ namespace PWApp.Services.Default
                             Created = DateTime.Now,
                             Amount = amount,
                             Balance = account.Balance
-                        });
+                        };
+
+                        Context.Transactions.Add(transaction);
 
                         await Context.SaveChangesAsync();
+
+                        dbContextTransaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -164,7 +184,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                mutex.ReleaseMutex();
+                semaphore.Release();
             }
 
 
@@ -179,7 +199,7 @@ namespace PWApp.Services.Default
 
             try
             {
-                mutex.WaitOne();
+                await semaphore.WaitAsync();
                 using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
@@ -205,6 +225,8 @@ namespace PWApp.Services.Default
                         Context.Transactions.Add(transaction);
 
                         await Context.SaveChangesAsync();
+
+                        dbContextTransaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -216,7 +238,7 @@ namespace PWApp.Services.Default
             }
             finally
             {
-                mutex.ReleaseMutex();
+                semaphore.Release();
             }
 
             return transaction;
@@ -308,15 +330,7 @@ namespace PWApp.Services.Default
                 }
             }
 
-            result.List = await query.Select(u => new UserVM
-            {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                UserName = u.UserName,
-                Email = u.Email,
-                Phone = u.PhoneNumber
-            }).ToListAsync();
+            result.List = await query.Select(u => UserVM.FromUser(u)).ToListAsync();
 
             return result;
         }
