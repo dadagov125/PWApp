@@ -114,7 +114,7 @@ namespace PWApp.Services.Default
             return account.Balance;
         }
 
-        public async void Transfer(string fromUserId, string toUserId, decimal amount)
+        public async Task Transfer(string fromUserId, string toUserId, decimal amount)
         {
             CheckPositiveAmount(amount);
 

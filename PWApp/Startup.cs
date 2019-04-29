@@ -1,5 +1,9 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +32,9 @@ namespace PWApp
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
-            
+
             ServiceProvider.Provide(services);
-            
+
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
 
@@ -40,6 +44,18 @@ namespace PWApp
                     opt.Password.RequireNonAlphanumeric = false;
                 })
                 .AddEntityFrameworkStores<ApplicationContext>();
+
+            services.ConfigureApplicationCookie((opt) =>
+            {
+                opt.Cookie.Expiration=TimeSpan.FromHours(24);
+                opt.CookieName = "auth_cookie";
+                
+                opt.Events.OnRedirectToLogin = async (ctx) =>
+                {
+                    ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await ctx.Response.WriteAsync("Unauthorized");
+                };
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -64,8 +80,9 @@ namespace PWApp
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+
             app.UseAuthentication();
-            
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -75,7 +92,6 @@ namespace PWApp
 
             app.UseSpa(spa =>
             {
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

@@ -13,7 +13,7 @@ namespace PWApp.Services
 
         Task<decimal> Withdraw(string userId, decimal amount);
 
-        void Transfer(string fromUserId, string toUserId, decimal amount);
+        Task Transfer(string fromUserId, string toUserId, decimal amount);
 
         Task<Account> CreateAccount(string userId);
 
