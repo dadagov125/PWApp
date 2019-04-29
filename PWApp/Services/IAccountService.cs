@@ -1,5 +1,4 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using PWApp.EF.Entities;
 using PWApp.Models.Filters;
 using PWApp.Models.Response;
@@ -15,11 +14,11 @@ namespace PWApp.Services
 
         Task<TransactionsListResponse> GetTransactions(string userId, PaginationFilter filter);
 
-        Task<Transaction> Deposit(string userId, decimal amount);
+        Task<TransactionResponse> Deposit(string userId, decimal amount);
 
-        Task<Transaction> Withdraw(string userId, decimal amount);
+        Task<TransactionResponse> Withdraw(string userId, decimal amount);
 
-        Task<Transaction> Transfer(string fromUserId, string toUserId, decimal amount);
+        Task<TransactionResponse> Transfer(string fromUserId, string toUserId, decimal amount);
 
         Task<Account> OpenAccount(string userId);
 

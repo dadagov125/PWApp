@@ -20,5 +20,21 @@ namespace PWApp.Models.Response
         public TransactionType TransactionType { get; set; }
 
         public string Comment { get; set; }
+
+        public static TransactionResponse FromTransaction(Transaction transaction)
+        {
+            if (transaction == null) return null;
+            return new TransactionResponse
+            {
+                Id = transaction.Id,
+                FromUser = UserResponse.FromUser(transaction.FromAccount?.Owner),
+                ToUser = UserResponse.FromUser(transaction.ToAccount?.Owner),
+                Amount = transaction.Amount,
+                Balance = transaction.Balance,
+                Created = transaction.Created,
+                TransactionType = transaction.TransactionType,
+                Comment = transaction.Comment
+            };
+        }
     }
 }

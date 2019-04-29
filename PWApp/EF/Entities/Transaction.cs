@@ -33,8 +33,8 @@ namespace PWApp.EF.Entities
 
     public enum TransactionType : byte
     {
-        DEPOSIT,
-        WITHDRAW,
-        TRANSFER
+        DEPOSIT=0,
+        WITHDRAW=1,
+        TRANSFER=3
     }
 }

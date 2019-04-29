@@ -30,7 +30,7 @@ namespace PWApp.Services.Default
 
         public async Task<Account> GetAccount(string userId)
         {
-            var account = await Context.Accounts.FirstOrDefaultAsync(a => a.OwnerId == userId);
+            var account = await Context.Accounts.Include(a => a.Owner).FirstOrDefaultAsync(a => a.OwnerId == userId);
 
             if (account == null)
             {
@@ -86,7 +86,7 @@ namespace PWApp.Services.Default
             return result;
         }
 
-        public async Task<Transaction> Deposit(string userId, decimal amount)
+        public async Task<TransactionResponse> Deposit(string userId, decimal amount)
         {
             CheckPositiveAmount(amount);
 
@@ -135,10 +135,10 @@ namespace PWApp.Services.Default
             }
 
 
-            return transaction;
+            return TransactionResponse.FromTransaction(transaction);
         }
 
-        public async Task<Transaction> Withdraw(string userId, decimal amount)
+        public async Task<TransactionResponse> Withdraw(string userId, decimal amount)
         {
             CheckPositiveAmount(amount);
 
@@ -185,10 +185,10 @@ namespace PWApp.Services.Default
             }
 
 
-            return transaction;
+            return TransactionResponse.FromTransaction(transaction);
         }
 
-        public async Task<Transaction> Transfer(string fromUserId, string toUserId, decimal amount)
+        public async Task<TransactionResponse> Transfer(string fromUserId, string toUserId, decimal amount)
         {
             CheckPositiveAmount(amount);
 
@@ -212,7 +212,9 @@ namespace PWApp.Services.Default
                         transaction = new Transaction()
                         {
                             FromAccountId = fromAccount.Id,
+                            FromAccount = fromAccount,
                             ToAccountId = toAccount.Id,
+                            ToAccount = toAccount,
                             TransactionType = TransactionType.TRANSFER,
                             Created = DateTime.Now,
                             Amount = amount,
@@ -238,7 +240,7 @@ namespace PWApp.Services.Default
                 semaphore.Release();
             }
 
-            return transaction;
+            return TransactionResponse.FromTransaction(transaction);
         }
 
         public async Task<Account> OpenAccount(string userId)

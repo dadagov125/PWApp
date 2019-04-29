@@ -1,6 +1,4 @@
-﻿import {HttpClient} from "@angular/common/http";
-import {Inject, Injectable, Optional} from "@angular/core";
-import {environment} from '../../environments/environment';
+﻿import {environment} from '../../environments/environment';
 
 export abstract class ApiServiceBase {
 
@@ -13,7 +11,6 @@ export abstract class ApiServiceBase {
   protected baseUrl: string;
 
   getActionUrl(action: string) {
-
     return `${this.controllerUrl}${action}`
   }
 }
