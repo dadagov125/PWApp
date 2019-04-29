@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PWApp.EF;
 using PWApp.Entities;
+using PWApp.ViewModels;
 
 namespace PWApp.Services.Default
 {
@@ -31,7 +34,7 @@ namespace PWApp.Services.Default
 
         public async Task<Account> GetAccount(string userId)
         {
-            var account = await Context.Accounts.FirstOrDefaultAsync(a => a.UserId == userId);
+            var account = await Context.Accounts.FirstOrDefaultAsync(a => a.OwnerId == userId);
 
             if (account == null)
             {
@@ -41,29 +44,73 @@ namespace PWApp.Services.Default
             return account;
         }
 
-        public async Task<decimal> Deposit(string userId, decimal amount)
+        public async Task<TransactionsListVM> GetTransactions(string userId, QueryFilter filter)
+        {
+            TransactionsListVM result = new TransactionsListVM();
+
+            var account = await GetAccount(userId);
+
+            var query = Context.Transactions.Where(t => t.ToAccountId == account.Id || t.FromAccountId == account.Id);
+
+            result.TotalCount = await query.CountAsync();
+
+            if (filter != null)
+            {
+                if (filter.Skip.HasValue)
+                {
+                    var skip = filter.Skip.Value;
+                    query = query.Skip(skip);
+                    result.Skipped = skip;
+                }
+
+                if (filter.Take.HasValue)
+                {
+                    var take = filter.Take.Value;
+                    query = query.Take(take);
+                    result.Taken = take;
+                }
+            }
+
+            result.Transactions = await query.ToListAsync();
+
+            return result;
+        }
+
+        public async Task<Transaction> Deposit(string userId, decimal amount)
         {
             CheckPositiveAmount(amount);
 
-            Account account = null;
+            Transaction transaction = null;
+
 
             try
             {
                 mutex.WaitOne();
 
-                using (var transaction = await Context.Database.BeginTransactionAsync())
+                using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        account = await GetAccount(userId);
+                        Account account = await GetAccount(userId);
 
                         account.Balance += amount;
 
+
+                        Context.Transactions.Add(new Transaction()
+                        {
+                            FromAccountId = account.Id,
+                            ToAccountId = null,
+                            TransactionType = TransactionType.DEPOSIT,
+                            Created = DateTime.Now,
+                            Amount = amount,
+                            Balance = account.Balance
+                        });
+
                         await Context.SaveChangesAsync();
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                        dbContextTransaction.Rollback();
 
                         throw e;
                     }
@@ -75,31 +122,41 @@ namespace PWApp.Services.Default
             }
 
 
-            return account.Balance;
+            return transaction;
         }
 
-        public async Task<decimal> Withdraw(string userId, decimal amount)
+        public async Task<Transaction> Withdraw(string userId, decimal amount)
         {
             CheckPositiveAmount(amount);
 
-            Account account = null;
+            Transaction transaction = null;
 
             try
             {
                 mutex.WaitOne();
-                using (var transaction = await Context.Database.BeginTransactionAsync())
+                using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
                     {
-                        account = await GetAccount(userId);
+                        Account account = await GetAccount(userId);
 
                         account.Balance -= amount;
+
+                        Context.Transactions.Add(new Transaction()
+                        {
+                            FromAccountId = account.Id,
+                            ToAccountId = null,
+                            TransactionType = TransactionType.WITHDRAW,
+                            Created = DateTime.Now,
+                            Amount = amount,
+                            Balance = account.Balance
+                        });
 
                         await Context.SaveChangesAsync();
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                        dbContextTransaction.Rollback();
 
                         throw e;
                     }
@@ -111,17 +168,19 @@ namespace PWApp.Services.Default
             }
 
 
-            return account.Balance;
+            return transaction;
         }
 
-        public async Task Transfer(string fromUserId, string toUserId, decimal amount)
+        public async Task<Transaction> Transfer(string fromUserId, string toUserId, decimal amount)
         {
             CheckPositiveAmount(amount);
+
+            Transaction transaction = null;
 
             try
             {
                 mutex.WaitOne();
-                using (var transaction = await Context.Database.BeginTransactionAsync())
+                using (var dbContextTransaction = await Context.Database.BeginTransactionAsync())
                 {
                     try
                     {
@@ -133,11 +192,23 @@ namespace PWApp.Services.Default
 
                         toAccount.Balance += amount;
 
+                        transaction = new Transaction()
+                        {
+                            FromAccountId = fromAccount.Id,
+                            ToAccountId = toAccount.Id,
+                            TransactionType = TransactionType.TRANSFER,
+                            Created = DateTime.Now,
+                            Amount = amount,
+                            Balance = fromAccount.Balance
+                        };
+
+                        Context.Transactions.Add(transaction);
+
                         await Context.SaveChangesAsync();
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                        dbContextTransaction.Rollback();
 
                         throw e;
                     }
@@ -147,11 +218,13 @@ namespace PWApp.Services.Default
             {
                 mutex.ReleaseMutex();
             }
+
+            return transaction;
         }
 
-        public async Task<Account> CreateAccount(string userId)
+        public async Task<Account> OpenAccount(string userId)
         {
-            if ((await Context.Accounts.FirstOrDefaultAsync(a => a.UserId == userId)) != null)
+            if ((await Context.Accounts.FirstOrDefaultAsync(a => a.OwnerId == userId)) != null)
             {
                 throw new Exception($"Account for user ${userId} already exists");
             }
@@ -160,7 +233,7 @@ namespace PWApp.Services.Default
             {
                 Balance = 0,
                 IsActive = true,
-                UserId = userId
+                OwnerId = userId
             };
 
             Context.Accounts.Add(account);
@@ -201,7 +274,7 @@ namespace PWApp.Services.Default
 
         private void CheckPositiveAmount(decimal amount)
         {
-            if (amount < 0)
+            if (amount <= 0)
             {
                 throw new Exception("Amount cannot be less 0");
             }

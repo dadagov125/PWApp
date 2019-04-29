@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PWApp.Entities;
+using PWApp.ViewModels;
 
 namespace PWApp.Services
 {
@@ -9,13 +11,15 @@ namespace PWApp.Services
 
         Task<Account> GetAccount(string userId);
 
-        Task<decimal> Deposit(string userId, decimal amount);
+        Task<TransactionsListVM> GetTransactions(string userId, QueryFilter filter);
 
-        Task<decimal> Withdraw(string userId, decimal amount);
+        Task<Transaction> Deposit(string userId, decimal amount);
 
-        Task Transfer(string fromUserId, string toUserId, decimal amount);
+        Task<Transaction> Withdraw(string userId, decimal amount);
 
-        Task<Account> CreateAccount(string userId);
+        Task<Transaction> Transfer(string fromUserId, string toUserId, decimal amount);
+
+        Task<Account> OpenAccount(string userId);
 
         void ActivateAccount(string userId);
 

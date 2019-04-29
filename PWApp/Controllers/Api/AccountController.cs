@@ -10,6 +10,7 @@ using PWApp.ViewModels;
 
 namespace PWApp.Controllers.Api
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
@@ -25,6 +26,7 @@ namespace PWApp.Controllers.Api
             AccountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterVM model)
         {
@@ -51,10 +53,9 @@ namespace PWApp.Controllers.Api
 
             await SignInManager.SignInAsync(user, true);
 
-            await AccountService.CreateAccount(user.Id);
+            await AccountService.OpenAccount(user.Id);
 
-            var balance = await AccountService.Deposit(user.Id, 500);
-
+            var transaction = await AccountService.Deposit(user.Id, 500);
 
             return Json(new UserAccountVM
             {
@@ -64,7 +65,7 @@ namespace PWApp.Controllers.Api
                 UserName = user.UserName,
                 Email = user.Email,
                 Phone = user.PhoneNumber,
-                Balance = balance
+                Balance = transaction.Balance
             });
         }
 
@@ -101,7 +102,6 @@ namespace PWApp.Controllers.Api
             });
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -110,9 +110,7 @@ namespace PWApp.Controllers.Api
             return Ok();
         }
 
-        
-        
-        [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> UserAccount()
         {
@@ -132,7 +130,16 @@ namespace PWApp.Controllers.Api
             });
         }
 
-        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Transactions([FromQuery] QueryFilter filter)
+        {
+            var user = await UserManager.GetUserAsync(User);
+
+            var transactions = await AccountService.GetTransactions(user.Id, filter);
+
+            return Json(transactions);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Balance()
         {
@@ -143,7 +150,6 @@ namespace PWApp.Controllers.Api
             return Json(balance);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Transfer([FromBody] TransferVN model)
         {
@@ -154,9 +160,9 @@ namespace PWApp.Controllers.Api
 
             var sender = await UserManager.GetUserAsync(User);
 
-            await AccountService.Transfer(sender.Id, model.ReceiverId, model.Amount);
+            var transaction = await AccountService.Transfer(sender.Id, model.ReceiverId, model.Amount);
 
-            return Json(await AccountService.GetBalance(sender.Id));
+            return Json(transaction);
         }
     }
 }

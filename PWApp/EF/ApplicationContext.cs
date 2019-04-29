@@ -13,5 +13,7 @@ namespace PWApp.EF
         }
         
         public DbSet<Account> Accounts { get; set; }
+        
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

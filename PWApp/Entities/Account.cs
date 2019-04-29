@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PWApp.Entities
 {
@@ -10,14 +11,18 @@ namespace PWApp.Entities
 
         public bool IsActive { get; set; }
 
-        public string UserId { get; set; }
+        public string OwnerId { get; set; }
 
-        public User User { get; set; }
+        public User Owner { get; set; }
+
+        public List<Transaction> Transactions;
 
 
         public Account()
         {
             Id = Guid.NewGuid().ToString();
+
+            Transactions = new List<Transaction>();
         }
     }
 }
