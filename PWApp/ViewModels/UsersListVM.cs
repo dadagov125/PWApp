@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using PWApp.Entities;
-
 
 namespace PWApp.ViewModels
 {
-    public class TransactionsListVM : IPaginationResult<Transaction>
+    public class UsersListVM : IPaginationResult<UserVM>
     {
-        public List<Transaction> List { get; set; }
+        public List<UserVM> List { get; set; }
 
         public int TotalCount { get; set; }
 

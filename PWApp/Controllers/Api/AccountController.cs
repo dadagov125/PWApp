@@ -131,13 +131,21 @@ namespace PWApp.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Transactions([FromQuery] QueryFilter filter)
+        public async Task<IActionResult> Transactions([FromQuery] PaginationFilter filter)
         {
             var user = await UserManager.GetUserAsync(User);
 
             var transactions = await AccountService.GetTransactions(user.Id, filter);
 
             return Json(transactions);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UsersAutocomplete([FromQuery] UsersListFilter filter)
+        {
+            var users = await AccountService.GetUsersList(filter);
+
+            return Json(users);
         }
 
         [HttpGet]

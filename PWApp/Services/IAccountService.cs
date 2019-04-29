@@ -11,7 +11,7 @@ namespace PWApp.Services
 
         Task<Account> GetAccount(string userId);
 
-        Task<TransactionsListVM> GetTransactions(string userId, QueryFilter filter);
+        Task<TransactionsListVM> GetTransactions(string userId, PaginationFilter filter);
 
         Task<Transaction> Deposit(string userId, decimal amount);
 
@@ -26,5 +26,7 @@ namespace PWApp.Services
         void BlockAccount(string userId);
 
         Task<bool> IsAccountActive(string userId);
+
+        Task<UsersListVM> GetUsersList(UsersListFilter filter);
     }
 }

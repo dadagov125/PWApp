@@ -44,7 +44,7 @@ namespace PWApp.Services.Default
             return account;
         }
 
-        public async Task<TransactionsListVM> GetTransactions(string userId, QueryFilter filter)
+        public async Task<TransactionsListVM> GetTransactions(string userId, PaginationFilter filter)
         {
             TransactionsListVM result = new TransactionsListVM();
 
@@ -71,7 +71,7 @@ namespace PWApp.Services.Default
                 }
             }
 
-            result.Transactions = await query.ToListAsync();
+            result.List = await query.ToListAsync();
 
             return result;
         }
@@ -270,6 +270,55 @@ namespace PWApp.Services.Default
             var account = await GetAccount(userId);
 
             return account.IsActive;
+        }
+
+        public async Task<UsersListVM> GetUsersList(UsersListFilter filter)
+        {
+            UsersListVM result = new UsersListVM();
+
+            var query = Context.Users.AsQueryable();
+
+            result.TotalCount = await query.CountAsync();
+
+            if (filter != null)
+            {
+                if (filter.Skip.HasValue)
+                {
+                    var skip = filter.Skip.Value;
+                    query = query.Skip(skip);
+                    result.Skipped = skip;
+                }
+
+                if (filter.Take.HasValue)
+                {
+                    var take = filter.Take.Value;
+                    query = query.Take(take);
+                    result.Taken = take;
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter.Text))
+                {
+                    var text = filter.Text;
+                    query = query.Where(u =>
+                        u.FirstName.Contains(text) ||
+                        u.LastName.Contains(text) ||
+                        u.UserName.Contains(text) ||
+                        u.Email.Contains(text) ||
+                        u.PhoneNumber.Contains(text));
+                }
+            }
+
+            result.List = await query.Select(u => new UserVM
+            {
+                Id = u.Id,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                UserName = u.UserName,
+                Email = u.Email,
+                Phone = u.PhoneNumber
+            }).ToListAsync();
+
+            return result;
         }
 
         private void CheckPositiveAmount(decimal amount)
