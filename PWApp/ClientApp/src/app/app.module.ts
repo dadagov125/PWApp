@@ -7,27 +7,33 @@ import {HttpClientModule} from '@angular/common/http';
 import {AppComponent} from './app.component';
 import {NavMenuComponent} from './components/nav-menu/nav-menu.component';
 import {HomeComponent} from './components/home/home.component';
-import {CounterComponent} from './counter/counter.component';
-import {FetchDataComponent} from './fetch-data/fetch-data.component';
+
+import {FetchDataComponent} from './components/fetch-data/fetch-data.component';
 import {AppRoutingModule} from './app-routing.module';
 import {AccountService} from "./services/account.service";
+import {MaterialModule} from "./material.module";
+import {BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule} from "@angular/flex-layout";
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     FetchDataComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MaterialModule,
+    FlexLayoutModule
   ],
   providers: [
-    AccountService
+    AccountService,
+
   ],
   bootstrap: [AppComponent]
 })

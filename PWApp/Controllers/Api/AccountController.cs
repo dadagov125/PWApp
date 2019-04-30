@@ -112,6 +112,11 @@ namespace PWApp.Controllers.Api
             return Ok();
         }
 
+        [HttpGet]
+        public IActionResult CheckLogin()
+        {
+            return Json("Success");
+        }
 
         [HttpGet]
         public async Task<IActionResult> UserAccount()

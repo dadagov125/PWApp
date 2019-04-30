@@ -1,6 +1,12 @@
-@media (max-width: 767px) {
-  /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
-  .body-content {
-    padding-top: 50px;
+@media (min-width: 600px) {
+  mat-sidenav mat-nav-list a span {
+    display: none;
+  }
+
+  mat-sidenav:hover mat-nav-list a span {
+    display: flex;
   }
 }
+
+
+

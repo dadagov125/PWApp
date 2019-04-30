@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {AccountService} from "../services/account.service";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-fetch-data',
