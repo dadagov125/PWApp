@@ -1,19 +1,19 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
-import {AppComponent} from './app.component';
-import {NavMenuComponent} from './components/nav-menu/nav-menu.component';
-import {HomeComponent} from './components/home/home.component';
+import { AppComponent } from './app.component';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
+import { HomeComponent } from './components/home/home.component';
 
-import {FetchDataComponent} from './components/fetch-data/fetch-data.component';
-import {AppRoutingModule} from './app-routing.module';
-import {AccountService} from "./services/account.service";
-import {MaterialModule} from "./material.module";
-import {BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule} from "@angular/flex-layout";
-
+import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AccountService } from "./services/account.service";
+import { MaterialModule } from "./material.module";
+import { BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule } from "@angular/flex-layout";
+import { AuthComponent } from './components/auth/auth.component';
 
 
 @NgModule({
@@ -21,10 +21,11 @@ import {BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule} from "@angular/flex-
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    AuthComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     AppRoutingModule,
@@ -33,7 +34,6 @@ import {BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule} from "@angular/flex-
   ],
   providers: [
     AccountService,
-
   ],
   bootstrap: [AppComponent]
 })

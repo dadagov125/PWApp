@@ -1,0 +1,46 @@
+<div fxLayout="column" fxLayoutAlign="center center">
+
+  <mat-card class="auth-main-card">
+    <mat-tab-group class="auth-tabs">
+      <mat-tab label="Login">
+        <div class="auth-main-card-log">
+          <form [formGroup]="loginForm" fxLayout="column" >
+
+
+            <mat-form-field>
+              <input matInput placeholder="Enter your email" type="email" name="emailLog" formControlName="emailLog">
+              <mat-error *ngIf="loginForm.controls['emailLog'].invalid" >Email required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Enter your password" type="password" name="passwordLog" formControlName="passwordLog">
+              <mat-error *ngIf="loginForm.controls['passwordLog'].invalid" >Password required!</mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <button [disabled]="loginForm.invalid"   mat-raised-button (click)="doLogin()" >
+                Login
+              </button>
+
+            </div>
+          </form>
+
+        </div>
+      </mat-tab>
+      <mat-tab label="Register">
+        <div class="auth-main-card-reg">
+          auth-main-card-reg
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+
+
+
+  </mat-card>
+
+
+
+
+</div>

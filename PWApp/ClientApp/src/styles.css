@@ -1,11 +1,19 @@
-
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 html, body, mat-sidenav-container {
   height: 100%;
   margin: 0;
 }
-.container{
+
+.container {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.snack-bar-panel {
+  width: 300px !important;
 }

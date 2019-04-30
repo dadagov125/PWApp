@@ -1,5 +1,5 @@
-﻿import {UserResponse} from "./user.response";
-import {TransactionType} from "../transaction-type";
+﻿import { UserResponse } from "./user.response";
+import { TransactionType } from "../transaction-type";
 
 export class TransactionResponse {
 
@@ -13,4 +13,3 @@ export class TransactionResponse {
   comment: string;
 
 }
-

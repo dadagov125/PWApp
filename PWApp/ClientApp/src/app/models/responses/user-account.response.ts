@@ -1,4 +1,4 @@
-import {UserResponse} from "./user.response";
+import { UserResponse } from "./user.response";
 
 export class UserAccountResponse extends UserResponse {
 

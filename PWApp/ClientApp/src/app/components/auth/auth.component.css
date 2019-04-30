@@ -1,0 +1,20 @@
+.auth-main-card { margin-top: 100px; }
+
+@media (max-width: 600px) {
+  .auth-main-card {
+    width: 95%;
+    margin-top: 5px;
+  }
+}
+
+.auth-main-card-log {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.auth-tabs mat-card {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}

@@ -57,6 +57,7 @@ namespace PWApp
                 };
             });
 
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
@@ -76,6 +77,8 @@ namespace PWApp
                 app.UseHsts();
             }
 
+            app.UseCors(opt => { opt.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials(); });
+
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -90,15 +93,15 @@ namespace PWApp
                     template: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+//            app.UseSpa(spa =>
+//            {
+//                spa.Options.SourcePath = "ClientApp";
+//
+//                if (env.IsDevelopment())
+//                {
+//                    spa.UseAngularCliServer(npmScript: "start");
+//                }
+//            });
         }
     }
 }

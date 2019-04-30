@@ -1,12 +1,12 @@
-import {NgModule} from '@angular/core';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {A11yModule} from '@angular/cdk/a11y';
-import {DragDropModule} from '@angular/cdk/drag-drop';
-import {PortalModule} from '@angular/cdk/portal';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {CdkStepperModule} from '@angular/cdk/stepper';
-import {CdkTableModule} from '@angular/cdk/table';
-import {CdkTreeModule} from '@angular/cdk/tree';
+import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { A11yModule } from '@angular/cdk/a11y';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PortalModule } from '@angular/cdk/portal';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
 import {
   MatAutocompleteModule,
   MatBadgeModule,
@@ -43,10 +43,13 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
+
 } from '@angular/material';
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     A11yModule,
     CdkStepperModule,
@@ -135,6 +138,7 @@ import {
     MatTreeModule,
     PortalModule,
     ScrollingModule,
+    ReactiveFormsModule
   ]
 })
 export class MaterialModule {

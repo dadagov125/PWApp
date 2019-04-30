@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
-import {MediaMatcher} from "@angular/cdk/layout";
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { MediaMatcher } from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,7 +7,6 @@ import {MediaMatcher} from "@angular/cdk/layout";
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-
 
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher) {
@@ -22,9 +21,10 @@ export class NavMenuComponent {
 
   mobileQuery: MediaQueryList;
 
-  fillerNav = Array.from({length: 50}, (_, i) => `Nav Item ${i + 1}`);
+  fillerNav = Array.from({ length: 50 }, (_, i) => `Nav Item ${i + 1}`);
 
-  fillerContent = Array.from({length: 2}, () =>
+  fillerContent = Array.from({ length: 2 },
+    () =>
     `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
@@ -39,9 +39,6 @@ export class NavMenuComponent {
   ngOnDestroy() {
     this.mobileQuery.removeListener(this.mobileQueryListener);
   }
-
-
-
 
 
 }

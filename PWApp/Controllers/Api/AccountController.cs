@@ -79,15 +79,23 @@ namespace PWApp.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
-
-            if (!result.Succeeded)
+            
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                return BadRequest(result.ToString());
+                ModelState.AddModelError("Email","Email is invalid");
+                return BadRequest(ModelState);
             }
 
-            var user = await UserManager.FindByEmailAsync(model.Email);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+            
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("Password","Password is invalid");
+                return BadRequest(ModelState);
+            }
+
+            
 
             var balance = await AccountService.GetBalance(user.Id);
 
