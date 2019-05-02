@@ -14,8 +14,8 @@ table {
 
 
   background-color: lightgray;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
 
 
@@ -23,4 +23,8 @@ table {
 
 .transaction-list-item>div{
   padding: 10px;
+}
+.transaction-list-main-head-actions button{
+  margin-left: 5px;
+  margin-right: 5px;
 }

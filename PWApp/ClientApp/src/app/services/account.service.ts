@@ -1,5 +1,5 @@
 import {ApiController, ApiServiceBase} from "./rest";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {RegisterRequest} from "../models/requests/register.request";
 import {UserAccountResponse} from "../models/responses/user-account.response";
@@ -12,6 +12,7 @@ import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {tap, onErrorResumeNext, catchError} from "rxjs/operators"
 import {CookieService} from "ngx-cookie-service";
 
+
 @ApiController('account')
 @Injectable()
 export class AccountService extends ApiServiceBase {
@@ -20,7 +21,7 @@ export class AccountService extends ApiServiceBase {
 
   redirectUrl: string;
 
-  userAccount:UserAccountResponse;
+  userAccount: UserAccountResponse;
 
   constructor(private http: HttpClient, private cookieService: CookieService) {
     super();
@@ -32,7 +33,7 @@ export class AccountService extends ApiServiceBase {
       .pipe(
         tap(data => {
           this.isLoggedIn = true;
-          this.userAccount=data;
+          this.userAccount = data;
         }));
   }
 
@@ -42,7 +43,7 @@ export class AccountService extends ApiServiceBase {
         tap(data => {
           this.isLoggedIn = true;
 
-          this.userAccount=data;
+          this.userAccount = data;
         }));
   }
 
@@ -51,7 +52,7 @@ export class AccountService extends ApiServiceBase {
       .pipe(
         tap(data => {
           this.isLoggedIn = false;
-          this.userAccount=null;
+          this.userAccount = null;
         }));
   }
 
@@ -68,7 +69,7 @@ export class AccountService extends ApiServiceBase {
       .pipe(
         tap(data => {
           this.isLoggedIn = true;
-          this.userAccount=data;
+          this.userAccount = data;
         }));
   }
 
@@ -80,14 +81,26 @@ export class AccountService extends ApiServiceBase {
     return this.http.get<TransactionsListResponse>(this.getActionUrl('transactions'), {withCredentials: true})
   }
 
-  getUsers() {
-    return this.http.get<UsersListResponse>(this.getActionUrl('users'), {withCredentials: true})
+  getUsers(text?: string) {
+
+    let params: HttpParams = new HttpParams();
+    if (text){
+      params=params.set('text', text);
+    }
+
+    params=params.set('take', '5');
+    params=params.set('skip', '0');
+
+
+    return this.http.get<UsersListResponse>(this.getActionUrl('users'), {
+      withCredentials: true,
+      params:params
+    })
   }
 
   Transfer(request: TransferRequest) {
     return this.http.post<TransactionResponse>(this.getActionUrl('transfer'), request, {withCredentials: true});
   }
-
 
 
 }

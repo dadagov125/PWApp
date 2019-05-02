@@ -1,0 +1,34 @@
+<h1 mat-dialog-title>Transfer</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="form" fxLayout="column">
+
+    <mat-form-field>
+      <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
+
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFullUserNameFn()">
+        <mat-option *ngFor="let user of filteredOptions | async" [value]="user" (onSelectionChange)="selectUser(user)">
+          {{displayFullUserName(user)}}
+        </mat-option>
+      </mat-autocomplete>
+
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <input matInput placeholder="Enter amount" type="number" [min]="0.01" [ngModel]="amount" name="amount"
+             formControlName="amount">
+      <mat-error *ngIf="form.controls['amount'].invalid">Min value {{0.01|currency}} and max value
+        {{balance|currency}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [disabled]="form.invalid" (click)="doTransfer()">Transfer</button>
+</div>

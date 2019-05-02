@@ -71,7 +71,7 @@ namespace PWApp.Services.Default
             result.List = await query
                 .Include(p => p.FromAccount).ThenInclude(a => a.Owner)
                 .Include(p => p.ToAccount).ThenInclude(a => a.Owner)
-                .OrderBy(t=>t.Created)
+                .OrderBy(t => t.Created)
                 .Select(t => new TransactionResponse
                 {
                     Id = t.Id,
@@ -299,6 +299,21 @@ namespace PWApp.Services.Default
             UsersListResponse result = new UsersListResponse();
 
             var query = Context.Users.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(filter?.IgnoreUserId))
+            {
+                query = query.Where(u => u.Id != filter.IgnoreUserId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter?.Text))
+            {
+                var text = filter.Text;
+                query = query.Where(u =>
+                    u.FirstName.Contains(text) ||
+                    u.LastName.Contains(text) ||
+                    u.UserName.Contains(text) ||
+                    u.Email.Contains(text) ||
+                    u.PhoneNumber.Contains(text));
+            }
 
             result.TotalCount = await query.CountAsync();
 
@@ -308,25 +323,14 @@ namespace PWApp.Services.Default
                 {
                     var skip = filter.Skip.Value;
                     query = query.Skip(skip);
-                    result.Skipped = skip;
+                    result.Skipped = result.TotalCount > 0 ? skip : 0;
                 }
 
                 if (filter.Take.HasValue)
                 {
                     var take = filter.Take.Value;
                     query = query.Take(take);
-                    result.Taken = take;
-                }
-
-                if (!string.IsNullOrWhiteSpace(filter.Text))
-                {
-                    var text = filter.Text;
-                    query = query.Where(u =>
-                        u.FirstName.Contains(text) ||
-                        u.LastName.Contains(text) ||
-                        u.UserName.Contains(text) ||
-                        u.Email.Contains(text) ||
-                        u.PhoneNumber.Contains(text));
+                    result.Taken = result.TotalCount > 0 ? take : 0;
                 }
             }
 

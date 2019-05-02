@@ -1,14 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AccountService} from "../../services/account.service";
-import {MatPaginator, MatTableDataSource} from "@angular/material";
-import {DataSource} from "@angular/cdk/table";
+import {MatPaginator} from "@angular/material";
+
 import {TransactionResponse} from "../../models/responses/transaction.response";
-import {CollectionViewer} from "@angular/cdk/collections";
-import {Observable} from "rxjs/internal/Observable";
-import {BehaviorSubject} from "rxjs/internal/BehaviorSubject";
-import {catchError, finalize} from "rxjs/operators";
-import {of} from "rxjs/internal/observable/of";
+
 import {TransactionType} from "../../models/transaction-type";
+import {MatDialog, MatDialogRef, MatDialogConfig, MAT_DIALOG_DATA} from '@angular/material';
+import {NewTransactionComponent} from "../new-transaction/new-transaction.component";
 
 @Component({
   selector: 'transactions-list',
@@ -21,21 +19,16 @@ export class TransactionsListComponent implements OnInit {
   //
   // dataSource: MatTableDataSource<TransactionResponse> = new MatTableDataSource<TransactionResponse>([]);
 
-  transactions: TransactionResponse[];
+  transactions: TransactionResponse[] = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(protected accountService: AccountService) {
-
+  constructor(protected accountService: AccountService, protected dialog: MatDialog) {
   }
 
   ngOnInit() {
-
     this.accountService.getTransactions().subscribe(value => {
-
       this.transactions = value.list;
     })
-
-
   }
 
   getTransactionTypeName(transaction: TransactionResponse) {
@@ -50,14 +43,29 @@ export class TransactionsListComponent implements OnInit {
         } else {
           return "Received"
         }
-
-
     }
   }
 
   canRepeat(transaction: TransactionResponse) {
-
     return transaction.transactionType == TransactionType.TRANSFER && this.accountService.userAccount.id === transaction.fromUser.id
+  }
+
+  openNewTransactionDialog(transaction: TransactionResponse) {
+
+    const dialogRef = this.dialog.open(NewTransactionComponent, {
+      height:'290px',
+      width:'350px',
+
+      data: {transaction}
+    });
+
+    dialogRef.afterClosed().subscribe((result:TransactionResponse) => {
+      console.log( result);
+      if (result){
+        this.transactions.push(result);
+      }
+
+    });
   }
 
 }

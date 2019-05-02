@@ -96,12 +96,6 @@ namespace PWApp.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            await AccountService.Transfer(UserManager.Users.FirstOrDefault(u => u.Id != user.Id).Id, user.Id, 45);
-
-            await AccountService.Transfer(user.Id,UserManager.Users.FirstOrDefault(u => u.Id != user.Id).Id,  34);
-            
-            await AccountService.Withdraw(user.Id, 122);
-
 
             var balance = await AccountService.GetBalance(user.Id);
 
@@ -163,7 +157,9 @@ namespace PWApp.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Users([FromQuery] UsersListFilter filter)
         {
-            var users = await AccountService.GetUsersList(filter);
+            filter.IgnoreUserId = UserManager.GetUserId(User);
+            
+           var users = await AccountService.GetUsersList(filter);
 
             return Json(users);
         }

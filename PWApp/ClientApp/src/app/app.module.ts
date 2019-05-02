@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 
-import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AccountService } from "./services/account.service";
 import { MaterialModule } from "./material.module";
@@ -17,6 +16,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import {CookieService} from "ngx-cookie-service";
 import { AppNavBarComponent } from './components/app-nav-bar/app-nav-bar.component';
 import { TransactionsListComponent } from './components/transactions-list/transactions-list.component';
+import { NewTransactionComponent } from './components/new-transaction/new-transaction.component';
 
 
 @NgModule({
@@ -24,11 +24,12 @@ import { TransactionsListComponent } from './components/transactions-list/transa
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    FetchDataComponent,
     AuthComponent,
     AppNavBarComponent,
-    TransactionsListComponent
+    TransactionsListComponent,
+    NewTransactionComponent
   ],
+  entryComponents:[NewTransactionComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
@@ -41,6 +42,7 @@ import { TransactionsListComponent } from './components/transactions-list/transa
     AccountService,
     CookieService
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule {
