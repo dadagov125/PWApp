@@ -14,31 +14,70 @@ import {Router} from "@angular/router";
 export class AuthComponent implements OnInit {
 
   constructor(protected accountService: AccountService, private router: Router, private snackBar: MatSnackBar) {
+
+
   }
+
+  loginForm: FormGroup;
+  registerForm: FormGroup;
 
   ngOnInit() {
+    this.loginForm = new FormGroup({
+      emailLog: new FormControl(null, [Validators.required, Validators.email]),
+      passwordLog: new FormControl(null, [Validators.required]),
+    });
+
+    this.registerForm = new FormGroup({
+      firstNameReg: new FormControl(null, [Validators.required]),
+      lastNameReg: new FormControl(null, [Validators.required]),
+      emailReg: new FormControl(null, [Validators.required, Validators.email]),
+      passwordReg: new FormControl(null, [Validators.required]),
+    });
+    this.registerForm.addControl('passwordConfirmReg', new FormControl(null, [this.passwordConfirmValidator.bind(this)]))
+
+    this.accountService.getUserAccount().subscribe(value =>{
+      this.router.navigate(['/'])
+    })
 
   }
 
-  loginForm = new FormGroup({
-    emailLog: new FormControl(null, [Validators.required, Validators.email]),
-    passwordLog: new FormControl(null, [Validators.required]),
-  });
 
+  passwordConfirmValidator(control: FormControl) {
+    const password = this.registerForm.controls['passwordReg'].value;
+    const passwordConfirm = control.value;
+    if (password === passwordConfirm) {
+      return null;
+    }
+    return {"passwordConfirmReg": true}
+  }
 
   doLogin() {
-    const value = this.loginForm.value;
-    const email = value.emailLog;
-    const password = value.passwordLog;
+    const {emailLog, passwordLog} = this.loginForm.value;
 
-    this.accountService.login({email, password}).subscribe(value => {
-        this.router.navigate([this.accountService.redirectUrl])
+    this.accountService.login({email: emailLog, password: passwordLog}).subscribe(value => {
+        this.router.navigate(['/'])
       },
       (err: HttpErrorResponse) => {
         this.snackBar.open(getErrorText(err), null, getDefaultSnackBarConfig());
       })
-
   }
 
+  doRegister() {
+
+    const {firstNameReg, lastNameReg, emailReg, passwordReg, passwordConfirmReg} = this.registerForm.value;
+
+    this.accountService.register({
+      firstName: firstNameReg,
+      lastName: lastNameReg,
+      email: emailReg,
+      password: passwordReg,
+      passwordConfirm: passwordConfirmReg
+    }).subscribe(value => {
+      this.router.navigate(['/'])
+    }, err => {
+      this.snackBar.open(getErrorText(err), null, getDefaultSnackBarConfig());
+    })
+
+  }
 
 }

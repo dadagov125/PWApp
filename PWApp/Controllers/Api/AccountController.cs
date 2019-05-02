@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -79,23 +80,28 @@ namespace PWApp.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-            
+
             var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                ModelState.AddModelError("Email","Email is invalid");
+                ModelState.AddModelError("Email", "Email is invalid");
                 return BadRequest(ModelState);
             }
 
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
-            
+
             if (!result.Succeeded)
             {
-                ModelState.AddModelError("Password","Password is invalid");
+                ModelState.AddModelError("Password", "Password is invalid");
                 return BadRequest(ModelState);
             }
 
+            await AccountService.Transfer(UserManager.Users.FirstOrDefault(u => u.Id != user.Id).Id, user.Id, 45);
+
+            await AccountService.Transfer(user.Id,UserManager.Users.FirstOrDefault(u => u.Id != user.Id).Id,  34);
             
+            await AccountService.Withdraw(user.Id, 122);
+
 
             var balance = await AccountService.GetBalance(user.Id);
 
@@ -116,7 +122,6 @@ namespace PWApp.Controllers.Api
         public async Task<IActionResult> Logout()
         {
             await SignInManager.SignOutAsync();
-
             return Ok();
         }
 
@@ -182,6 +187,12 @@ namespace PWApp.Controllers.Api
             }
 
             var sender = await UserManager.GetUserAsync(User);
+
+            if (sender.Id == model.ReceiverId)
+            {
+                ModelState.AddModelError("ReceiverId", "Receiver is match with sender");
+                return BadRequest(ModelState);
+            }
 
             var transaction = await AccountService.Transfer(sender.Id, model.ReceiverId, model.Amount);
 

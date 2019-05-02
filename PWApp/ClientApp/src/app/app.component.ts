@@ -1,7 +1,9 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { MediaMatcher } from "@angular/cdk/layout";
-import { MatSidenav } from "@angular/material";
-import { AccountService } from "./services/account.service";
+import {ChangeDetectorRef, Component, Inject, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {MediaMatcher} from "@angular/cdk/layout";
+import {MatSidenav} from "@angular/material";
+import {AccountService} from "./services/account.service";
+import {Router} from "@angular/router";
+import {UserAccountResponse} from "./models/responses/user-account.response";
 
 @Component({
   selector: 'app-root',
@@ -12,10 +14,12 @@ export class AppComponent implements OnInit {
 
   mobileQuery: MediaQueryList;
 
+  userAccount: UserAccountResponse;
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
-    private media: MediaMatcher,
-    protected accountService: AccountService) {
+              private media: MediaMatcher,
+              private router: Router,
+              protected accountService: AccountService) {
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
 
@@ -23,15 +27,21 @@ export class AppComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
 
+  ngOnInit(): void {
 
   }
 
+  logout() {
+    this.accountService.logout().subscribe(value => {
+      this.router.navigate(['/auth'])
+    })
+  }
 
-  fillerContent = Array.from({ length: 2 },
+
+  fillerContent = Array.from({length: 2},
     () =>
-    `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+      `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
        voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat

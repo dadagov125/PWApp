@@ -42,14 +42,12 @@ namespace PWApp
                 {
                     opt.User.RequireUniqueEmail = true;
                     opt.Password.RequireNonAlphanumeric = false;
+           
                 })
                 .AddEntityFrameworkStores<ApplicationContext>();
 
             services.ConfigureApplicationCookie((opt) =>
             {
-                opt.Cookie.Expiration=TimeSpan.FromHours(24);
-                opt.CookieName = "auth_cookie";
-                
                 opt.Events.OnRedirectToLogin = async (ctx) =>
                 {
                     ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -60,7 +58,6 @@ namespace PWApp
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
         }
 

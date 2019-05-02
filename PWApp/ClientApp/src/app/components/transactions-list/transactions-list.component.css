@@ -1,0 +1,26 @@
+table {
+  margin-top: 15px;
+  width: 100%;
+}
+.transaction-list-item:hover{
+  opacity: 0.9;
+
+  background-color: lightslategray;
+}
+
+.transaction-list-item{
+  border-radius: 3px;
+
+
+
+  background-color: lightgray;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+
+
+}
+
+.transaction-list-item>div{
+  padding: 10px;
+}

@@ -4,21 +4,22 @@
     <mat-tab-group class="auth-tabs">
       <mat-tab label="Login">
         <div class="auth-main-card-log">
-          <form [formGroup]="loginForm" fxLayout="column" >
+          <form [formGroup]="loginForm" fxLayout="column">
 
 
             <mat-form-field>
               <input matInput placeholder="Enter your email" type="email" name="emailLog" formControlName="emailLog">
-              <mat-error *ngIf="loginForm.controls['emailLog'].invalid" >Email required!</mat-error>
+              <mat-error *ngIf="loginForm.controls['emailLog'].invalid">Email required!</mat-error>
             </mat-form-field>
 
             <mat-form-field>
-              <input matInput placeholder="Enter your password" type="password" name="passwordLog" formControlName="passwordLog">
-              <mat-error *ngIf="loginForm.controls['passwordLog'].invalid" >Password required!</mat-error>
+              <input matInput placeholder="Enter your password" type="password" name="passwordLog"
+                     formControlName="passwordLog">
+              <mat-error *ngIf="loginForm.controls['passwordLog'].invalid">Password required!</mat-error>
             </mat-form-field>
 
             <div fxLayout="row" fxLayoutAlign="center center">
-              <button [disabled]="loginForm.invalid"   mat-raised-button (click)="doLogin()" >
+              <button [disabled]="loginForm.invalid" mat-raised-button (click)="doLogin()">
                 Login
               </button>
 
@@ -29,18 +30,50 @@
       </mat-tab>
       <mat-tab label="Register">
         <div class="auth-main-card-reg">
-          auth-main-card-reg
+
+          <form [formGroup]="registerForm" fxLayout="column">
+
+            <mat-form-field>
+              <input matInput placeholder="Enter first name" type="text" name="firstNameReg" formControlName="firstNameReg">
+              <mat-error *ngIf="registerForm.controls['firstNameReg'].invalid">First name required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Enter last name" type="text" name="lastNameReg" formControlName="lastNameReg">
+              <mat-error *ngIf="registerForm.controls['lastNameReg'].invalid">Last name required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Enter email" type="email" name="emailReg" formControlName="emailReg">
+              <mat-error *ngIf="registerForm.controls['emailReg'].invalid">Email required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Enter password" type="password" name="passwordReg"
+                     formControlName="passwordReg">
+              <mat-error *ngIf="registerForm.controls['passwordReg'].invalid">Password required!</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Confirm password" type="password" name="passwordConfirmReg"
+                     formControlName="passwordConfirmReg">
+              <mat-error *ngIf="registerForm.controls['passwordConfirmReg'].invalid">Password does not match!</mat-error>
+            </mat-form-field>
+
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <button [disabled]="registerForm.invalid" mat-raised-button (click)="doRegister()">
+                Login
+              </button>
+            </div>
+          </form>
+
         </div>
       </mat-tab>
 
     </mat-tab-group>
 
 
-
-
   </mat-card>
-
-
 
 
 </div>

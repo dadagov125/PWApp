@@ -71,6 +71,7 @@ namespace PWApp.Services.Default
             result.List = await query
                 .Include(p => p.FromAccount).ThenInclude(a => a.Owner)
                 .Include(p => p.ToAccount).ThenInclude(a => a.Owner)
+                .OrderBy(t=>t.Created)
                 .Select(t => new TransactionResponse
                 {
                     Id = t.Id,

@@ -1,8 +1,4 @@
-<mat-toolbar *ngIf="accountService.isLoggedIn" color="primary">
-  <button *ngIf="mobileQuery.matches" mat-icon-button (click)="snav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-</mat-toolbar>
+<app-nav-bar [sideNav]="snav" [logout]="logout"></app-nav-bar>
 
 <mat-sidenav-container>
   <mat-sidenav *ngIf="accountService.isLoggedIn" #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
@@ -17,12 +13,13 @@
         <span>Home</span>
       </a>
 
-      <a mat-list-item [routerLink]='["/fetch-data"]'>
+      <a mat-list-item [routerLink]='["/transactions"]'>
         <button mat-icon-button>
           <mat-icon>list</mat-icon>
         </button>
-        <span> Fetch data</span>
+        <span> Transactions</span>
       </a>
+
     </mat-nav-list>
   </mat-sidenav>
 

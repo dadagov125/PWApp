@@ -14,6 +14,9 @@ import { AccountService } from "./services/account.service";
 import { MaterialModule } from "./material.module";
 import { BREAKPOINTS, DEFAULT_BREAKPOINTS, FlexLayoutModule } from "@angular/flex-layout";
 import { AuthComponent } from './components/auth/auth.component';
+import {CookieService} from "ngx-cookie-service";
+import { AppNavBarComponent } from './components/app-nav-bar/app-nav-bar.component';
+import { TransactionsListComponent } from './components/transactions-list/transactions-list.component';
 
 
 @NgModule({
@@ -22,7 +25,9 @@ import { AuthComponent } from './components/auth/auth.component';
     NavMenuComponent,
     HomeComponent,
     FetchDataComponent,
-    AuthComponent
+    AuthComponent,
+    AppNavBarComponent,
+    TransactionsListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,6 +39,7 @@ import { AuthComponent } from './components/auth/auth.component';
   ],
   providers: [
     AccountService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
