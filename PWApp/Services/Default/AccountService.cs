@@ -153,6 +153,10 @@ namespace PWApp.Services.Default
                     try
                     {
                         Account account = await GetAccount(userId);
+                        if (amount > account.Balance)
+                        {
+                            throw new Exception("Amount cannot be great of balance");
+                        }
 
                         account.Balance -= amount;
 
@@ -203,6 +207,11 @@ namespace PWApp.Services.Default
                     try
                     {
                         var fromAccount = await GetAccount(fromUserId);
+
+                        if (amount > fromAccount.Balance)
+                        {
+                            throw new Exception("Amount cannot be great of balance");
+                        }
 
                         var toAccount = await GetAccount(toUserId);
 
