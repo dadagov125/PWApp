@@ -8,6 +8,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import {
+
+
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
@@ -92,9 +94,10 @@ import { ReactiveFormsModule } from "@angular/forms";
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
-    ScrollingModule,
+    ScrollingModule
   ],
   exports: [
+
     BrowserAnimationsModule,
     A11yModule,
     CdkStepperModule,

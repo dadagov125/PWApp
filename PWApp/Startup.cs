@@ -90,15 +90,15 @@ namespace PWApp
                     template: "{controller}/{action=Index}/{id?}");
             });
 
-//            app.UseSpa(spa =>
-//            {
-//                spa.Options.SourcePath = "ClientApp";
-//
-//                if (env.IsDevelopment())
-//                {
-//                    spa.UseAngularCliServer(npmScript: "start");
-//                }
-//            });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
     }
 }
