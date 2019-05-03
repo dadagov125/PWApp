@@ -1,6 +1,6 @@
 <mat-toolbar *ngIf="accountService.isLoggedIn" color="primary" fxLayout="row" fxLayoutAlign="space-between center">
   <div class="toolbar-left">
-    <button *ngIf="mobileQuery.matches" mat-icon-button (click)="sideNav.toggle()">
+    <button *ngIf="mobileQuery.matches" mat-icon-button (click)="toggle.emit()">
       <mat-icon>menu</mat-icon>
     </button>
   </div>
@@ -12,14 +12,12 @@
   <div class="toolbar-right" fxLayout="row" fxLayoutAlign="end center">
 
     <div>
-      {{accountService.userAccount?.firstName}}
-      {{accountService.userAccount?.lastName}}
     </div>
     &nbsp;
     <div class="app-bar-balance">
       Balance: {{accountService.userAccount?.balance| currency}}
     </div>
-    <button *ngIf="accountService.isLoggedIn" mat-icon-button (click)="logout()">
+    <button *ngIf="accountService.isLoggedIn" mat-icon-button (click)="logout.emit()">
       <mat-icon>exit_to_app</mat-icon>
     </button>
   </div>

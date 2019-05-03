@@ -1,6 +1,6 @@
 <div class="transaction-list-item" role="listitem" fxLayout="row"
      fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutAlign.xs="center start">
-  <div>
+  <div fxFlexOrder.xs="3">
     <div mat-line>
       {{transactionTypeName}}
     </div>
@@ -8,7 +8,9 @@
       {{transaction.created|date:'dd MMMM yyyy HH:mm'}}
     </div>
   </div>
-  <div fxFlex>
+
+
+  <div fxFlex fxFlexOrder.xs="1">
     <div mat-line>
       {{transaction.transactionType==0||transaction.transactionType==1?'For:':'From:' }}
       {{transaction.fromUser?.firstName}}
@@ -18,7 +20,9 @@
       To: {{transaction.toUser?.firstName}} {{transaction.toUser?.lastName}}
     </div>
   </div>
-  <div>
+
+
+  <div fxFlexOrder.xs="4">
     <button mat-icon-button *ngIf="canRepeat"
             (click)="openTransferDialog.emit(transaction)">
       <mat-icon>
@@ -26,7 +30,8 @@
       </mat-icon>
     </button>
   </div>
-  <div fxLayout="column" fxLayoutAlign="end center">
+
+  <div fxFlexOrder.xs="2" fxLayout="column" fxLayoutAlign="end center">
     <div mat-line>
       Amount: {{transaction.amount}}
     </div>

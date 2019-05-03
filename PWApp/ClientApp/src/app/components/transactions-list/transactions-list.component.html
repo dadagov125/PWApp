@@ -1,21 +1,22 @@
-<div class="transaction-list-main">
-  <div class="transaction-list-main-head" fxLayout="row" fxLayoutAlign="space-between center">
-    <h3>Transactions</h3>
-    <div fxLayout="row" class="transaction-list-main-head-actions">
+<div class="transaction-list-main" fxLayout="column">
+  <div class="transaction-list-main-head" fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="start start" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="start center" class="transaction-list-main-head-actions">
       <button mat-raised-button
               (click)="openNewTransactionDialog()">
         <mat-icon>swap_horiz</mat-icon>
-        Transfer
+        <span fxHide.xs>Transfer</span>
       </button>
 
       <button mat-raised-button>
         <mat-icon>arrow_downward</mat-icon>
-        Replenish
+
+        <span fxHide.xs>Replenish</span>
       </button>
 
       <button mat-raised-button>
         <mat-icon>arrow_upward</mat-icon>
-        Withdraw
+        <span fxHide.xs>Withdraw</span>
+
       </button>
     </div>
   </div>

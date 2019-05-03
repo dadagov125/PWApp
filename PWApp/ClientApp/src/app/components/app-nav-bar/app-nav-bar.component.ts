@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserAccountResponse} from "../../models/responses/user-account.response";
 import {MediaMatcher} from "@angular/cdk/layout";
@@ -15,9 +15,9 @@ export class AppNavBarComponent implements OnInit {
 
   mobileQuery: MediaQueryList;
 
-  @Input() sideNav: MatSidenav;
+  @Output() logout=new EventEmitter();
 
-  @Input() logout: () => void;
+  @Output() toggle = new EventEmitter();
 
   constructor(private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher,
@@ -29,6 +29,7 @@ export class AppNavBarComponent implements OnInit {
     this.mobileQuery.addListener(this.mobileQueryListener.bind(this));
 
   }
+
 
   ngOnInit() {
 

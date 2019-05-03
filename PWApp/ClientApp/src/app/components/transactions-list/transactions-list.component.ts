@@ -47,7 +47,7 @@ export class TransactionsListComponent implements OnInit {
     return transaction.transactionType == TransactionType.TRANSFER && this.accountService.userAccount.id === transaction.fromUser.id
   }
 
-  openNewTransactionDialog = (transaction: TransactionResponse) => {
+  openNewTransactionDialog (transaction: TransactionResponse) {
     const dialogRef = this.dialog.open(NewTransactionComponent, {
       height: '290px',
       width: '350px',

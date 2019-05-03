@@ -1,5 +1,26 @@
 @media (min-width: 600px) {
-  mat-sidenav mat-nav-list a span { display: none; }
+  mat-sidenav mat-nav-list a span {
+    display: none;
+  }
 
-  mat-sidenav:hover mat-nav-list a span { display: flex; }
+  mat-sidenav{
+    max-width: 200px!important;
+  }
+
+  mat-sidenav:hover mat-nav-list a span {
+    display: flex;
+
+  }
+}
+
+@media (max-width: 600px) {
+  mat-sidenav{
+    max-width: 70%!important;
+  }
+}
+
+.user-profile-item {
+  min-height: 70px;
+  /*padding-left: 10px;*/
+  /*padding-top: 10px;*/
 }
