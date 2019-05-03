@@ -16,6 +16,7 @@ import {CookieService} from "ngx-cookie-service";
 import {AppNavBarComponent} from './components/app-nav-bar/app-nav-bar.component';
 import {TransactionsListComponent} from './components/transactions-list/transactions-list.component';
 import {NewTransactionComponent} from './components/new-transaction/new-transaction.component';
+import { TransactionsListItemComponent } from './components/transactions-list-item/transactions-list-item.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {NewTransactionComponent} from './components/new-transaction/new-transact
     AuthComponent,
     AppNavBarComponent,
     TransactionsListComponent,
-    NewTransactionComponent
+    NewTransactionComponent,
+    TransactionsListItemComponent
   ],
   entryComponents: [NewTransactionComponent],
   imports: [

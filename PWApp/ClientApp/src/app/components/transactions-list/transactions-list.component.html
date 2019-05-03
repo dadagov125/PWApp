@@ -19,54 +19,14 @@
       </button>
     </div>
   </div>
-
   <mat-list class="transaction-list" role="list">
-
-    <div class="transaction-list-item" role="listitem" *ngFor="let t of transactions" fxLayout="row"
-         fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutAlign.xs="center start">
-
-      <div>
-        <div mat-line>
-          {{getTransactionTypeName(t)}}
-        </div>
-
-        <div mat-line>
-          {{t.created|date:'dd MMMM yyyy HH:mm'}}
-        </div>
-      </div>
-
-      <div fxFlex>
-        <div mat-line>
-          {{t.transactionType==0||t.transactionType==1?'For:':'From:' }} {{t.fromUser?.firstName}}
-          {{t.fromUser?.lastName}}
-        </div>
-
-        <div *ngIf="t.transactionType==3" mat-line>
-          To: {{t.toUser?.firstName}} {{t.toUser?.lastName}}
-        </div>
-      </div>
-      <div>
-        <button mat-icon-button *ngIf="canRepeat(t)"
-                (click)="openNewTransactionDialog(t)">
-          <mat-icon>
-            replay
-          </mat-icon>
-        </button>
-      </div>
-      <div fxLayout="column" fxLayoutAlign="end center">
-
-        <div mat-line>
-          Amount: {{t.amount}}
-        </div>
-
-        <div mat-line>
-          Balance: {{t.balance}}
-        </div>
-
-      </div>
-    </div>
+    <transactions-list-item *ngFor="let t of transactions"
+                            (openTransferDialog)="openNewTransactionDialog($event)"
+                            [canRepeat]="canRepeat(t)"
+                            [transactionTypeName]="getTransactionTypeName(t)"
+                            [transaction]="t">
+    </transactions-list-item>
   </mat-list>
-
 </div>
 
 

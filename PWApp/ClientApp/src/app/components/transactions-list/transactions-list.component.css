@@ -1,29 +1,5 @@
-table {
-  margin-top: 15px;
-  width: 100%;
-}
-.transaction-list-item:hover{
-  opacity: 0.9;
-
-  background-color: lightslategray;
-}
-
-.transaction-list-item{
-  border-radius: 3px;
 
 
-
-  background-color: lightgray;
-  margin-top: 5px;
-  margin-bottom: 5px;
-
-
-
-}
-
-.transaction-list-item>div{
-  padding: 10px;
-}
 .transaction-list-main-head-actions button{
   margin-left: 5px;
   margin-right: 5px;

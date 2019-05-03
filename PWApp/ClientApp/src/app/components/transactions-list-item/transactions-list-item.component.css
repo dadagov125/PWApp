@@ -1,0 +1,15 @@
+.transaction-list-item:hover{
+  opacity: 0.9;
+  background-color: rgba(171, 196, 214, 0.55);
+}
+
+.transaction-list-item{
+  border-radius: 3px;
+  background-color: #cbcbcb;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.transaction-list-item>div{
+  padding: 10px;
+}

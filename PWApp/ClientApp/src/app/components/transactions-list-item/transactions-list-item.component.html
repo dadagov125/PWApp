@@ -1,0 +1,37 @@
+<div class="transaction-list-item" role="listitem" fxLayout="row"
+     fxLayout.xs="column" fxLayoutAlign="space-between center" fxLayoutAlign.xs="center start">
+  <div>
+    <div mat-line>
+      {{transactionTypeName}}
+    </div>
+    <div mat-line>
+      {{transaction.created|date:'dd MMMM yyyy HH:mm'}}
+    </div>
+  </div>
+  <div fxFlex>
+    <div mat-line>
+      {{transaction.transactionType==0||transaction.transactionType==1?'For:':'From:' }}
+      {{transaction.fromUser?.firstName}}
+      {{transaction.fromUser?.lastName}}
+    </div>
+    <div *ngIf="transaction.transactionType==3" mat-line>
+      To: {{transaction.toUser?.firstName}} {{transaction.toUser?.lastName}}
+    </div>
+  </div>
+  <div>
+    <button mat-icon-button *ngIf="canRepeat"
+            (click)="openTransferDialog.emit(transaction)">
+      <mat-icon>
+        replay
+      </mat-icon>
+    </button>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="end center">
+    <div mat-line>
+      Amount: {{transaction.amount}}
+    </div>
+    <div mat-line>
+      Balance: {{transaction.balance}}
+    </div>
+  </div>
+</div>

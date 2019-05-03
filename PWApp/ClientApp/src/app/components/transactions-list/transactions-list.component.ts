@@ -15,11 +15,8 @@ import {NewTransactionComponent} from "../new-transaction/new-transaction.compon
 })
 export class TransactionsListComponent implements OnInit {
 
-  // displayedColumns: string[] = ['date', 'user', 'email', 'amount', 'balance'];
-  //
-  // dataSource: MatTableDataSource<TransactionResponse> = new MatTableDataSource<TransactionResponse>([]);
-
   transactions: TransactionResponse[] = [];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(protected accountService: AccountService, protected dialog: MatDialog) {
@@ -34,14 +31,14 @@ export class TransactionsListComponent implements OnInit {
   getTransactionTypeName(transaction: TransactionResponse) {
     switch (transaction.transactionType) {
       case TransactionType.DEPOSIT:
-        return "Replenished"
+        return "Replenished";
       case TransactionType.WITHDRAW:
         return "Withdrawn";
       case TransactionType.TRANSFER:
         if (this.accountService.userAccount.id === transaction.fromUser.id) {
-          return "Transferred"
+          return "Transferred";
         } else {
-          return "Received"
+          return "Received";
         }
     }
   }
@@ -50,21 +47,18 @@ export class TransactionsListComponent implements OnInit {
     return transaction.transactionType == TransactionType.TRANSFER && this.accountService.userAccount.id === transaction.fromUser.id
   }
 
-  openNewTransactionDialog(transaction: TransactionResponse) {
-
+  openNewTransactionDialog = (transaction: TransactionResponse) => {
     const dialogRef = this.dialog.open(NewTransactionComponent, {
-      height:'290px',
-      width:'350px',
+      height: '290px',
+      width: '350px',
 
       data: {transaction}
     });
 
-    dialogRef.afterClosed().subscribe((result:TransactionResponse) => {
-      console.log( result);
-      if (result){
+    dialogRef.afterClosed().subscribe((result: TransactionResponse) => {
+      if (result) {
         this.transactions.push(result);
       }
-
     });
   }
 
